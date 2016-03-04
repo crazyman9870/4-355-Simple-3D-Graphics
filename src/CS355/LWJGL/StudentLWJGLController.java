@@ -28,13 +28,22 @@ import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL11.glOrtho;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
 
-/**
- *
- * @author Brennan Smith
- */
+import java.util.Iterator;
+import org.lwjgl.util.vector.Vector3f;
+
 public class StudentLWJGLController implements CS355LWJGLController 
 {
-  
+	private enum projectionType {
+		ORTHOGRAPHIC, PERSPECTIVE
+	}
+	
+	private projectionType projection; 
+	
+	private Vector3f position = new Vector3f();
+	
+	private float yaw = 0.0f;
+	
+	private static final float UNIT = 1.0f;
   //This is a model of a house.
   //It has a single method that returns an iterator full of Line3Ds.
   //A "Line3D" is a wrapper class around two Point2Ds.
@@ -47,7 +56,13 @@ public class StudentLWJGLController implements CS355LWJGLController
   @Override
   public void resizeGL() 
   {
-
+	  this.projection = projectionType.PERSPECTIVE;
+	  glViewport(0, 0, LWJGLSandbox.DISPLAY_WIDTH, LWJGLSandbox.DISPLAY_HEIGHT);
+	  
+	  glMatrixMode(GL_PROJECTION);
+	  glLoadIdentity();
+	  
+	  //moveHome();
   }
 
     @Override
@@ -77,6 +92,26 @@ public class StudentLWJGLController implements CS355LWJGLController
         glClear(GL_COLOR_BUFFER_BIT);
         
         //Do your drawing here.
+		glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        
+        switch(this.projection)
+        {
+        	case PERSPECTIVE:
+        		gluPerspective(60.0f, (float) LWJGLSandbox.DISPLAY_WIDTH / LWJGLSandbox.DISPLAY_HEIGHT, 1.0f, 100.0f);
+        		break;
+        	case ORTHOGRAPHIC:
+        		glOrtho(-6.0f, 6.0f, -6.0f, 6.0f, 1.0f, 100.0f);
+        		break;
+        }
+        
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        
+        glRotatef(yaw, 0.0f, 1.0f, 0.0f);
+        glTranslatef(position.x, position.y, position.z);
+        
+        //draw();
     }
     
 }
