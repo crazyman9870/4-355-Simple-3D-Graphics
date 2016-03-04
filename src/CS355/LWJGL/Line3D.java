@@ -1,9 +1,5 @@
 package CS355.LWJGL;
 
-/**
- *
- * @author Brennan Smith
- */
 public class Line3D 
 {
     public Point3D start;

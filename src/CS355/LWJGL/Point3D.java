@@ -1,9 +1,5 @@
 package CS355.LWJGL;
 
-/**
- *
- * @author Brennan Smith
- */
 public class Point3D 
 {
     public double x;
